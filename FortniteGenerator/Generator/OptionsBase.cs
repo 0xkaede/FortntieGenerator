@@ -12,6 +12,7 @@ public class OptionsBase
         
         options.Add(ArcticAdelineSwap.Get());
         options.Add(MechaStrikeNavigator.Get());
+        options.Add(BlazeSwap.Get());
         return options;
     }
 }

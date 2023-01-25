@@ -26,6 +26,8 @@ namespace FortniteGenerator // Note: actual namespace depends on the project nam
                 Logger.Log("Generating Skins in Skins.Json!");
                 await SkinsAsync();
             }
+            
+            Console.ReadLine();
         }
 
         async static Task SkinsAsync()

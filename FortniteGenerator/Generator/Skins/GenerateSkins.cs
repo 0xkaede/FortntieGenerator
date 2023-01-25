@@ -285,10 +285,10 @@ namespace FortniteGenerator.Generator.Skins
         public async static Task GenerateIds()
         {
             foreach (var asset in _provider.Files)
-                if(!asset.Key.Contains("/Tandem/"))
+                if (!asset.Key.Contains("/Tandem/"))
                     if (asset.Key.Contains("FortniteGame/Content/Athena/Items/Cosmetics/Characters/"))
                         Id.Add(asset.Key.Split(".").FirstOrDefault());
-            
+
             Id.Sort();
         }
 

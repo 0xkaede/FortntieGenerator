@@ -8,6 +8,8 @@ namespace FortniteGenerator.Enums
 {
     public enum SwapTypes
     {
+        None,
+        
         SkeletalMesh,
         MasterSkeletalMeshes,
         MaterialOverrides,
