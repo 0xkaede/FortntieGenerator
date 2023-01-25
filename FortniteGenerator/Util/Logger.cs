@@ -26,7 +26,17 @@ namespace FortniteGenerator.Util
             if (typeName.Contains('<'))
                 typeName = typeName.Split("<")[1].Split(">")[0];
 
-            Console.WriteLine($"[{DateTime.Now}] [Log{typeName}::{methodName} {level.GetDescription()}] {message}");
+            if (level == LogLevel.Info)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"[{DateTime.Now}] [Log{typeName}::{methodName} {level.GetDescription()}] {message}");
+            }
+            
+            if (level == LogLevel.Error)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"[{DateTime.Now}] [Log{typeName}::{methodName} {level.GetDescription()}] {message}");
+            }
         }
 
         public static string GetDescription(this Enum value)
