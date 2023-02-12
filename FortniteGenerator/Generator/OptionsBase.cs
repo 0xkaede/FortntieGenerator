@@ -1,8 +1,9 @@
 ﻿using FortniteGenerator.FortniteApi;
+using FortniteGenerator.Generator.BackBlings;
 using FortniteGenerator.Generator.Skins;
 using FortniteGenerator.Models;
 
-namespace MyApp.Generator;
+namespace FortniteGenerator.Generator;
 
 public class OptionsBase
 {
@@ -13,6 +14,14 @@ public class OptionsBase
         options.Add(ArcticAdelineSwap.Get());
         options.Add(MechaStrikeNavigator.Get());
         options.Add(BlazeSwap.Get());
+        return options;
+    }
+    
+    public static List<Options> GetBackBling()
+    {
+        List<Options> options = new List<Options>();
+        
+        options.Add(FrozenRedShieldSwap.Get());
         return options;
     }
 }

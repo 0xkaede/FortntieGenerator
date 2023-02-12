@@ -48,6 +48,7 @@ public class BlazeSwap
                         {
                             Search =
                                 "/Game/Effects/Fort_Effects/Effects/Characters/Athena_Parts/RenegadeRaider_Fire/NS_RenegadeRaider_Fire.NS_RenegadeRaider_Fire",
+                            Replace = "/Game/Kaede.Kaede",
                             SwapType = SwapTypes.None
                         },
                     }

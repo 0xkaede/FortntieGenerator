@@ -1,30 +1,12 @@
 ﻿using CUE4Parse.FileProvider;
-using CUE4Parse.GameTypes.FN.Enums;
 using CUE4Parse.UE4.Assets.Exports;
 using CUE4Parse.UE4.Assets.Objects;
 using CUE4Parse.UE4.Objects.Core.i18N;
 using CUE4Parse.UE4.Objects.UObject;
-using CUE4Parse;
-using CUE4Parse.Encryption.Aes;
-using CUE4Parse.FileProvider;
-using CUE4Parse.MappingsProvider;
-using CUE4Parse.UE4.Assets.Exports;
-using CUE4Parse.UE4.Assets.Objects;
-using CUE4Parse.UE4.Objects.Core.i18N;
-using CUE4Parse.UE4.Objects.Core.Misc;
-using CUE4Parse.UE4.Versions;
 using FortniteGenerator.Enums;
 using FortniteGenerator.Models;
 using FortniteGenerator.Util;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CUE4Parse.Utils;
-using MyApp.Generator;
 
 namespace FortniteGenerator.Generator.Skins
 {
@@ -71,6 +53,8 @@ namespace FortniteGenerator.Generator.Skins
                             var characterAssetPath = characterParts
                                 .FirstOrDefault(x => x.GetPathName().Contains("Bodies"))
                                 .GetPathName();
+                            
+                            Console.WriteLine(characterAssetPath);
 
                             if (!_provider.TryLoadObject(characterAssetPath.Split('.').FirstOrDefault(),
                                     out var characterAsset))
@@ -81,7 +65,7 @@ namespace FortniteGenerator.Generator.Skins
                                 if (swap.SwapType == SwapTypes.SkeletalMesh)
                                 {
                                     if (!characterAsset.TryGetValue(out FSoftObjectPath skeletalMesh, "SkeletalMesh"))
-                                        swap.Replace = "/Game/kaede.kaede";
+                                        swap.Replace = Constants.FallbackString;
                                     else
                                         swap.Replace = skeletalMesh.AssetPathName.Text;
                                 }
@@ -90,7 +74,7 @@ namespace FortniteGenerator.Generator.Skins
                                 {
                                     if (!characterAsset.TryGetValue(out FSoftObjectPath[] masterSkeletalMeshes,
                                             "MasterSkeletalMeshes"))
-                                        swap.Replace = "/Game/kaede.kaede";
+                                        swap.Replace = Constants.FallbackString;
                                     else
                                         swap.Replace = masterSkeletalMeshes.FirstOrDefault().AssetPathName.Text;
                                 }
@@ -100,13 +84,13 @@ namespace FortniteGenerator.Generator.Skins
                                     if (!characterAsset.TryGetValue(out FStructFallback[] materialOverrides,
                                             "MaterialOverrides"))
                                     {
-                                        swap.Replace = "/Game/kaede.kaede";
+                                        swap.Replace = Constants.FallbackString;
                                         continue;
                                     }
 
                                     if (!materialOverrides.FirstOrDefault()
                                             .TryGetValue(out FSoftObjectPath overrideMaterial, "OverrideMaterial"))
-                                        swap.Replace = "/Game/kaede.kaede";
+                                        swap.Replace = Constants.FallbackString;
                                     else
                                         swap.Replace = overrideMaterial.AssetPathName.Text;
                                 }
@@ -144,7 +128,7 @@ namespace FortniteGenerator.Generator.Skins
 
                                     if (!additionalData.TryGetValue(out FSoftObjectPath hairColorSwatch,
                                             "HairColorSwatch"))
-                                        swap.Replace = "/Game/Kaede.Kaede";
+                                        swap.Replace = Constants.FallbackString;
                                     else
                                         swap.Replace = hairColorSwatch.AssetPathName.Text;
                                 }
@@ -163,7 +147,7 @@ namespace FortniteGenerator.Generator.Skins
                                 if (swap.SwapType == SwapTypes.SkeletalMesh)
                                 {
                                     if (!characterAsset.TryGetValue(out FSoftObjectPath skeletalMesh, "SkeletalMesh"))
-                                        swap.Replace = "/Game/kaede.kaede";
+                                        swap.Replace = Constants.FallbackString;
                                     else
                                         swap.Replace = skeletalMesh.AssetPathName.Text;
                                 }
@@ -173,13 +157,13 @@ namespace FortniteGenerator.Generator.Skins
                                     if (!characterAsset.TryGetValue(out FStructFallback[] materialOverrides,
                                             "MaterialOverrides"))
                                     {
-                                        swap.Replace = "/Game/kaede.kaede";
+                                        swap.Replace = Constants.FallbackString;
                                         continue;
                                     }
 
                                     if (!materialOverrides.FirstOrDefault()
                                             .TryGetValue(out FSoftObjectPath overrideMaterial, "OverrideMaterial"))
-                                        swap.Replace = "/Game/kaede.kaede";
+                                        swap.Replace = Constants.FallbackString;
                                     else
                                         swap.Replace = overrideMaterial.AssetPathName.Text;
                                 }
@@ -242,7 +226,7 @@ namespace FortniteGenerator.Generator.Skins
                                 if (swap.SwapType == SwapTypes.SkeletalMesh)
                                 {
                                     if (!characterAsset.TryGetValue(out FSoftObjectPath skeletalMesh, "SkeletalMesh"))
-                                        swap.Replace = "/Game/kaede.kaede";
+                                        swap.Replace = Constants.FallbackString;
                                     else
                                         swap.Replace = skeletalMesh.AssetPathName.Text;
                                 }
@@ -252,13 +236,13 @@ namespace FortniteGenerator.Generator.Skins
                                     if (!characterAsset.TryGetValue(out FStructFallback[] materialOverrides,
                                             "MaterialOverrides"))
                                     {
-                                        swap.Replace = "/Game/kaede.kaede";
+                                        swap.Replace = Constants.FallbackString;
                                         continue;
                                     }
 
                                     if (!materialOverrides.FirstOrDefault()
                                             .TryGetValue(out FSoftObjectPath overrideMaterial, "OverrideMaterial"))
-                                        swap.Replace = "/Game/kaede.kaede";
+                                        swap.Replace = Constants.FallbackString;
                                     else
                                         swap.Replace = overrideMaterial.AssetPathName.Text;
                                 }
@@ -294,7 +278,9 @@ namespace FortniteGenerator.Generator.Skins
 
         public async static Task Save()
         {
-            await File.WriteAllTextAsync("Skins.Json", JsonConvert.SerializeObject(items, Formatting.Indented));
+            await File.WriteAllTextAsync(Constants.SkinFile, JsonConvert.SerializeObject(items, Formatting.Indented));
+            await File.WriteAllTextAsync(Constants.SkinFileCompressed,
+                FileUtil.Compress(await File.ReadAllTextAsync(Constants.SkinFile)));
         }
     }
 }

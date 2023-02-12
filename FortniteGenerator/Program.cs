@@ -2,6 +2,7 @@
 using FortniteGenerator.Util;
 using System;
 using System.Diagnostics;
+using MyApp.Generator.BackBlings;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -14,12 +15,14 @@ namespace FortniteGenerator // Note: actual namespace depends on the project nam
 
         async static Task RunAsync()
         {
-            Console.Write("1) Skins \nPlease select as option you want to generate:");
+            Directory.CreateDirectory(Constants.BasePath);
+            Directory.CreateDirectory(Constants.ItemsPath);
+            
+            Console.Write("1) Skins \n2) Backblings\nPlease select as option you want to generate:");
             var num = Console.ReadLine();
             
-            Console.Clear();
             
-            await KaedeProvider.Init();
+            Console.Clear();
 
             if (num == "1")
             {
@@ -27,11 +30,20 @@ namespace FortniteGenerator // Note: actual namespace depends on the project nam
                 await SkinsAsync();
             }
             
-            Console.ReadLine();
+            if (num == "2")
+            {
+                Logger.Log("Generating Backblings in Backblings.Json!");
+                await BackblingAsync();
+            }
+            
+            Console.WriteLine("\nPress enter to continute...");
+            Console.ReadKey();
         }
 
         async static Task SkinsAsync()
         {
+            await KaedeProvider.Init();
+            
             var sw = Stopwatch.StartNew();
             await GenerateSkins.GenerateIds();
 
@@ -39,6 +51,21 @@ namespace FortniteGenerator // Note: actual namespace depends on the project nam
                 await GenerateSkins.GenerateBase(id);
 
             await GenerateSkins.Save();
+            
+            Logger.Log($"Done in {sw.Elapsed.Minutes}m and {sw.Elapsed.Seconds}s");
+        }
+        
+        async static Task BackblingAsync()
+        {
+            await KaedeProvider.Init();
+            
+            var sw = Stopwatch.StartNew();
+            await BackblingGenerator.GenerateIds();
+
+            foreach (var id in BackblingGenerator.Id)
+                await BackblingGenerator.GenerateBase(id);
+
+            await BackblingGenerator.Save();
             
             Logger.Log($"Done in {sw.Elapsed.Minutes}m and {sw.Elapsed.Seconds}s");
         }
