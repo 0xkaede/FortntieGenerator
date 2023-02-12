@@ -2,6 +2,7 @@
 using FortniteGenerator.Util;
 using System;
 using System.Diagnostics;
+using FortniteGenerator.Generator.Emotes;
 using MyApp.Generator.BackBlings;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -18,7 +19,7 @@ namespace FortniteGenerator // Note: actual namespace depends on the project nam
             Directory.CreateDirectory(Constants.BasePath);
             Directory.CreateDirectory(Constants.ItemsPath);
             
-            Console.Write("1) Skins \n2) Backblings\nPlease select as option you want to generate:");
+            Console.Write("1) Skins \n2) Backblings\n3) Emotes\nPlease select as option you want to generate:");
             var num = Console.ReadLine();
             
             
@@ -34,6 +35,12 @@ namespace FortniteGenerator // Note: actual namespace depends on the project nam
             {
                 Logger.Log("Generating Backblings in Backblings.Json!");
                 await BackblingAsync();
+            }
+            
+            if (num == "3")
+            {
+                Logger.Log("Generating Emotes in Emotes.Json!");
+                await EmoteAsync();
             }
             
             Console.WriteLine("\nPress enter to continute...");
@@ -66,6 +73,21 @@ namespace FortniteGenerator // Note: actual namespace depends on the project nam
                 await BackblingGenerator.GenerateBase(id);
 
             await BackblingGenerator.Save();
+            
+            Logger.Log($"Done in {sw.Elapsed.Minutes}m and {sw.Elapsed.Seconds}s");
+        }
+        
+        async static Task EmoteAsync()
+        {
+            await KaedeProvider.Init();
+            
+            var sw = Stopwatch.StartNew();
+            await GenerateEmote.GenerateIds();
+
+            foreach (var id in GenerateEmote.Id)
+                await GenerateEmote.GenerateBase(id);
+
+            await GenerateEmote.Save();
             
             Logger.Log($"Done in {sw.Elapsed.Minutes}m and {sw.Elapsed.Seconds}s");
         }

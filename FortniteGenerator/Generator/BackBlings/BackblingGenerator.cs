@@ -63,8 +63,6 @@ public class BackblingGenerator
 
             foreach (var option in OptionsBase.GetBackBling())
             {
-               
-
                 foreach (var optionasset in option.Assets)
                 {
                     var characterAssetPath = characterParts.FirstOrDefault().GetPathName();
@@ -111,8 +109,15 @@ public class BackblingGenerator
                                 swap.Replace = overrideMaterial.AssetPathName.Text;
                         }
                     }
+                    
                 }
+                
+                backbling.Options.Add(option);
             }
+            
+            items.Add(backbling);
+
+            Logger.Log($"Item: {backbling.Id} was generated with {backbling.Options.Count} option's");
         }
         catch (Exception ex)
         {

@@ -14,6 +14,11 @@ namespace FortniteGenerator.Enums
         MasterSkeletalMeshes,
         MaterialOverrides,
         AnimClass,
-        HairColorSwatch
+        HairColorSwatch,
+        
+        Animation,
+        AnimationFemaleOverride,
+        SmallPreviewImage,
+        LargePreviewImage,
     }
 }

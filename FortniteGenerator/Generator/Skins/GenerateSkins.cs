@@ -257,8 +257,6 @@ namespace FortniteGenerator.Generator.Skins
                 items.Add(skin);
 
                 Logger.Log($"Item: {skin.Id} was generated with {skin.Options.Count} option's");
-
-                File.WriteAllText("skins.json", JsonConvert.SerializeObject(skin, Formatting.Indented));
             }
             catch
             {

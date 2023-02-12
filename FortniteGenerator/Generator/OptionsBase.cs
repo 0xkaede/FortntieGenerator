@@ -1,5 +1,6 @@
 ﻿using FortniteGenerator.FortniteApi;
 using FortniteGenerator.Generator.BackBlings;
+using FortniteGenerator.Generator.Emotes;
 using FortniteGenerator.Generator.Skins;
 using FortniteGenerator.Models;
 
@@ -22,6 +23,14 @@ public class OptionsBase
         List<Options> options = new List<Options>();
         
         options.Add(FrozenRedShieldSwap.Get());
+        return options;
+    }
+    
+    public static List<Options> GetEmotes()
+    {
+        List<Options> options = new List<Options>();
+        
+        options.Add(BoogieDownSwap.Get());
         return options;
     }
 }
